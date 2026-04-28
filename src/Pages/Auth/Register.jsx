@@ -1,5 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import useAuth from "../../Hooks/useAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const Register = () => {
   const {
@@ -7,8 +10,19 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const {registerUser} = useAuth();
+  const navigate = useNavigate();
   const handleRegistration = (data) => {
     console.log(data);
+    registerUser(data.email, data.password)
+    .then(()=>{
+      toast.success('Registration Completed!');
+      navigate('/')
+
+    })
+    .catch(error => {
+      console.log(error);
+    })
   };
   return (
     <div>
@@ -16,7 +30,7 @@ const Register = () => {
         <fieldset className="fieldset">
           <label className="label">Full Name</label>
           <input
-            type="email"
+            type="text"
             {...register("fullName", { required: true })}
             className="input w-full"
             placeholder="Enter Full Name"
