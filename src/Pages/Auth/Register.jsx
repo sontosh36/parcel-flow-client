@@ -2,7 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import SocialLogin from "./SocialLogin/SocialLogin";
 
 const Register = () => {
   const {
@@ -10,23 +11,22 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const {registerUser} = useAuth();
+  const { registerUser } = useAuth();
   const navigate = useNavigate();
   const handleRegistration = (data) => {
-    console.log(data);
     registerUser(data.email, data.password)
-    .then(()=>{
-      toast.success('Registration Completed!');
-      navigate('/')
-
-    })
-    .catch(error => {
-      console.log(error);
-    })
+      .then(() => {
+        toast.success("Registration Completed!");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit(handleRegistration)}>
+    <div className="card bg-base-200 shadow hover:shadow-xl w-full p-3 mx-auto max-w-sm">
+      <h2 className="text-3xl text-center">Create an Account</h2>
+      <form className="card-body" onSubmit={handleSubmit(handleRegistration)}>
         <fieldset className="fieldset">
           <label className="label">Full Name</label>
           <input
@@ -69,13 +69,14 @@ const Register = () => {
           )}
           {errors.password?.type === "pattern" && (
             <p className="text-red-500">
-              Password must have at least one uppercase, at least Lowercase , at
-              least one number, and at least one special characters
+              Password must have at least one uppercase, one Lowercase , one number and one special characters
             </p>
           )}
           <button className="btn btn-neutral mt-4">Register</button>
         </fieldset>
+        <p>Already have an account <Link className="text-blue-500 underline" to={'/login'}>Login</Link></p>
       </form>
+      <SocialLogin></SocialLogin>
     </div>
   );
 };
