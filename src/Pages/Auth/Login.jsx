@@ -67,7 +67,7 @@ const Login = () => {
         <p className="text-sm">
           New to be parcel flow{" "}
           <Link
-            className="text-blue-500 underline "
+            className="text-blue-500 underline"
             state={location.state}
             to={"/register"}
           >

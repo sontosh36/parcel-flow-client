@@ -33,7 +33,6 @@ const Register = () => {
           };
           updateUserProfile(userProfile)
             .then(() => {
-              console.log("user profile updated.");
               toast.success("Registration Completed!");
               navigate(location.state || "/");
             })

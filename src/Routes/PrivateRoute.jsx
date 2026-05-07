@@ -5,7 +5,6 @@ import { Navigate, useLocation } from "react-router";
 const PrivateRoute = ({ children }) => {
   const { user, Loading } = useAuth();
   const location = useLocation();
-  console.log(location);
   if (Loading) {
     return (
       <div className="min-h-screen w-full">
