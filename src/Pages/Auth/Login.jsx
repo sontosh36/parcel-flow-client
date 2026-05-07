@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
 import SocialLogin from "./SocialLogin/SocialLogin";
 import { toast } from "react-toastify";
@@ -13,11 +13,12 @@ const Login = () => {
   } = useForm();
   const { signInUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const handleLogin = (data) => {
     signInUser(data.email, data.password)
       .then(() => {
         toast.success("Login Successful");
-        navigate('/')
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         console.log(error);
@@ -65,7 +66,11 @@ const Login = () => {
         </fieldset>
         <p className="text-sm">
           New to be parcel flow{" "}
-          <Link className="text-blue-500 underline " to={"/register"}>
+          <Link
+            className="text-blue-500 underline "
+            state={location.state}
+            to={"/register"}
+          >
             Register
           </Link>
         </p>

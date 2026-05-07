@@ -74,7 +74,7 @@ const Navbar = () => {
         ) : (
           <Link to={"/login"}>Log In</Link>
         )}
-        <Link className="btn btn-primary text-gray-800 mx-3" to={'/'}>Be a Rider</Link>
+        <Link className="btn btn-primary text-gray-800 mx-3" to={'/rider'}>Be a Rider</Link>
       </div>
     </div>
   );

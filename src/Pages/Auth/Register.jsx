@@ -12,22 +12,35 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { registerUser } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
+
   const handleRegistration = (data) => {
     const profileImg = data.photo[0];
     registerUser(data.email, data.password)
       .then(() => {
-        toast.success("Registration Completed!");
-        navigate("/");
         //store the image and get the photo url
         const formData = new FormData();
         formData.append("image", profileImg);
         const imageApiURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_hostKey}`;
-        axios.post(imageApiURL, formData).then((res) => {
-          console.log("after image upload", res.data.data.url);
+        axios.post(imageApiURL, formData)
+        .then((res) => {
+          const imageURL = res.data.data.url;
+          // update user profile to firebase
+          const userProfile = {
+            displayName: data.fullName,
+            photoURL: imageURL,
+          };
+          updateUserProfile(userProfile)
+            .then(() => {
+              console.log("user profile updated.");
+              toast.success("Registration Completed!");
+              navigate(location.state || "/");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         });
-        // update user profile
       })
       .catch((error) => {
         console.log(error);
@@ -100,7 +113,11 @@ const Register = () => {
         </fieldset>
         <p>
           Already have an account{" "}
-          <Link className="text-blue-500 underline" to={"/login"}>
+          <Link
+            className="text-blue-500 underline"
+            state={location.state}
+            to={"/login"}
+          >
             Login
           </Link>
         </p>
