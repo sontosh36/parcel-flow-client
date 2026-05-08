@@ -3,9 +3,9 @@ import useAuth from "../Hooks/useAuth";
 import { Navigate, useLocation } from "react-router";
 
 const PrivateRoute = ({ children }) => {
-  const { user, Loading } = useAuth();
+  const { user, loading } = useAuth();
   const location = useLocation();
-  if (Loading) {
+  if (loading) {
     return (
       <div className="min-h-screen w-full">
         <span className="loading loading-infinity loading-xl"></span>
