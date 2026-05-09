@@ -2,6 +2,8 @@ import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import useAuth from './../../Hooks/useAuth';
 
 const ParcelSend = () => {
   const {
@@ -10,6 +12,8 @@ const ParcelSend = () => {
     control,
     formState: { errors },
   } = useForm();
+  const {user} = useAuth();
+  const axiosSecure = useAxiosSecure();
   const serviceCenters = useLoaderData();
   const regionsDuplicate = serviceCenters.map((center) => center.region);
   const regions = [...new Set(regionsDuplicate)];
@@ -25,7 +29,6 @@ const ParcelSend = () => {
   };
 
   const handleParcelSend = (data) => {
-    console.log(data);
     const isDocument = data.parcelType === "document";
     const isSameDistrict = data.senderDistrict === data.receiverDistrict;
     const parcelWeight = parseFloat(data.parcelWeight);
@@ -44,7 +47,6 @@ const ParcelSend = () => {
         cost = minCharge + extraCharge;
       }
     }
-    console.log("service cost", cost);
     Swal.fire({
       title: "Agree with the Cost?",
       text: `You will be charged ${cost} TK`,
@@ -55,12 +57,16 @@ const ParcelSend = () => {
       confirmButtonText: "Agree",
     }).then((result) => {
       if (result.isConfirmed)
-        
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
+        // save the parcel info to the database
+      axiosSecure.post('/parcels', data)
+      .then(res =>{
+        console.log('after saving parcel', res.data)
+      })
+        // Swal.fire({
+        //   title: "Deleted!",
+        //   text: "Your file has been deleted.",
+        //   icon: "success",
+        // });
     });
   };
   return (
@@ -128,16 +134,18 @@ const ParcelSend = () => {
             <input
               type="text"
               {...register("senderName")}
+              defaultValue={user?.displayName}
               className="w-full input"
-              placeholder="Sender Name"
+              readOnly
             />
             {/* sender email */}
             <label className="label">Email</label>
             <input
               type="email"
               {...register("senderEmail")}
+              defaultValue={user?.email}
               className="w-full input"
-              placeholder="Sender Email"
+              readOnly
             />
 
             {/* sender phone */}

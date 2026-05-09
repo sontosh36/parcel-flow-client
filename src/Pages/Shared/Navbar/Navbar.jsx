@@ -10,7 +10,7 @@ const Navbar = () => {
   const handleLogOut = () => {
     signOutUser()
       .then(() => {
-        toast.success('LogOut Successful')
+        toast.success("LogOut Successful");
         navigate("/");
       })
       .catch((err) => {
@@ -25,9 +25,11 @@ const Navbar = () => {
       <li>
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
-      <li>
-        <NavLink to="/send-parcel">Send Parcel</NavLink>
-      </li>
+      {user && (
+        <li>
+          <NavLink to="/send-parcel">Send Parcel</NavLink>
+        </li>
+      )}
       <li>
         <NavLink to="">About Us</NavLink>
       </li>
@@ -77,7 +79,9 @@ const Navbar = () => {
         ) : (
           <Link to={"/login"}>Log In</Link>
         )}
-        <Link className="btn btn-primary text-gray-800 mx-3" to={'/rider'}>Be a Rider</Link>
+        <Link className="btn btn-primary text-gray-800 mx-3" to={"/rider"}>
+          Be a Rider
+        </Link>
       </div>
     </div>
   );
