@@ -5,9 +5,11 @@ import Coverage from "../Pages/Coverage/Coverage";
 import AuthLayout from "../Layouts/AuthLayout/AuthLayout";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from "./PrivateRoute";
 import Riders from "../Pages/Rider/Riders";
 import ParcelSend from "../Pages/ParcelSend/ParcelSend";
+import DashboardLayout from "../Layouts/DashboardLayout/DashboardLayout";
+import MyParcels from "../Pages/Dashboard/MyParcels/MyParcels";
 
 export const router = createBrowserRouter([
   {
@@ -19,13 +21,21 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: 'rider',
-        element: <PrivateRoute><Riders></Riders></PrivateRoute>
+        path: "rider",
+        element: (
+          <PrivateRoute>
+            <Riders></Riders>
+          </PrivateRoute>
+        ),
       },
       {
-        path: 'send-parcel',
-        element: <PrivateRoute><ParcelSend></ParcelSend></PrivateRoute>,
-        loader: () => fetch("/services-centers.json").then((res) => res.json())
+        path: "send-parcel",
+        element: (
+          <PrivateRoute>
+            <ParcelSend></ParcelSend>
+          </PrivateRoute>
+        ),
+        loader: () => fetch("/services-centers.json").then((res) => res.json()),
       },
       {
         path: "coverage",
@@ -35,17 +45,31 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/',
+    path: "/",
     Component: AuthLayout,
     children: [
-        {
-            path: 'login',
-            Component: Login,
-        },
-        {
-            path: 'register',
-            Component: Register,
-        }
-    ]
-  }
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Register,
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "my-parcels",
+        Component: MyParcels,
+      },
+    ],
+  },
 ]);
